@@ -1,0 +1,104 @@
+[gd_scene load_steps=13 format=3 uid="uid://b831hm8eyekia"]
+
+[ext_resource type="Texture2D" uid="uid://d0djok8y1fmuk" path="res://Assets/Player/Player Front Sheet.png" id="1_ojk5f"]
+
+[sub_resource type="GDScript" id="GDScript_f2tth"]
+script/source = "extends CharacterBody2D
+
+# Export makes it editable in our inspector panel
+@export var speed = 50
+
+func _physics_process(delta):
+	# Get's the player input(left, right, up)
+	var direction: Vector2
+	direction.x = Input.get_action_strength(\"ui_right\") - Input.get_action_strength(\"ui_left\")
+	
+	direction.y = Input.get_action_strength(\"ui_up\") - Input.get_action_strength(\"ui_down\")
+	
+	# If input is digital, normalize it for diagonal movement
+	
+	if abs(direction.x) == 1 and abs(direction.y) == 1:
+		direction = direction.normalized()
+		# Declares the movement for our character
+		var movement = direction * speed * delta
+		#moves our player around and enforces collisions with other objects
+		
+		move_and_collide(movement)
+		
+"
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f7vmh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7rwxy"]
+atlas = ExtResource("1_ojk5f")
+region = Rect2(0, 44, 48, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7ma2q"]
+atlas = ExtResource("1_ojk5f")
+region = Rect2(48, 44, 48, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_88wu7"]
+atlas = ExtResource("1_ojk5f")
+region = Rect2(96, 44, 48, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v0ing"]
+atlas = ExtResource("1_ojk5f")
+region = Rect2(144, 44, 48, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_di1j6"]
+atlas = ExtResource("1_ojk5f")
+region = Rect2(192, 44, 48, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f54y2"]
+atlas = ExtResource("1_ojk5f")
+region = Rect2(240, 44, 48, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_51cp8"]
+atlas = ExtResource("1_ojk5f")
+region = Rect2(288, 44, 48, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ax3q8"]
+atlas = ExtResource("1_ojk5f")
+region = Rect2(336, 44, 48, 44)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hclqm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7rwxy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7ma2q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_88wu7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v0ing")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_di1j6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f54y2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_51cp8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ax3q8")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
+
+[node name="Player" type="CharacterBody2D"]
+script = SubResource("GDScript_f2tth")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_f7vmh")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_hclqm")
+frame_progress = 0.25412
