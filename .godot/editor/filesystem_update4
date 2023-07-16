@@ -1,1 +1,5 @@
 res://Scenes/Main.tscn
+res://Scenes/Health.gd
+res://Scenes/Main.gd
+res://Scenes/Stamina.gd
+res://Scenes/player.tscn
