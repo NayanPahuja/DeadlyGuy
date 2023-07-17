@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://c18du5a3uo5g7"]
+[gd_scene load_steps=23 format=3 uid="uid://c18du5a3uo5g7"]
 
 [ext_resource type="Texture2D" uid="uid://ckx6cfsnq6t2b" path="res://Assets/Atlas.png" id="1_0elv6"]
 [ext_resource type="PackedScene" uid="uid://b831hm8eyekia" path="res://Scenes/player.tscn" id="1_c8w33"]
@@ -7,6 +7,11 @@
 [ext_resource type="Texture2D" uid="uid://fqukk3j6s0xu" path="res://Assets/Interior.png" id="3_8oeyr"]
 [ext_resource type="Script" path="res://Scenes/Health.gd" id="6_vpjrp"]
 [ext_resource type="Script" path="res://Scenes/Stamina.gd" id="7_gpyv2"]
+[ext_resource type="Texture2D" uid="uid://b6wahuhdh6mbg" path="res://Assets/Icons/shard_01i.png" id="8_85own"]
+[ext_resource type="FontFile" uid="uid://lxeddhw7kru1" path="res://Assets/Font/ARCADECLASSIC.TTF" id="9_wn6jw"]
+[ext_resource type="Texture2D" uid="uid://c4xvnv66nrhov" path="res://Assets/Icons/potion_02c.png" id="10_p52or"]
+[ext_resource type="Texture2D" uid="uid://b581pya58xpi0" path="res://Assets/Icons/potion_01b.png" id="11_wcije"]
+[ext_resource type="PackedScene" uid="uid://dd2lourmi1cpv" path="res://Scenes/pickup.tscn" id="12_4mcpu"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_mja62"]
 tile_data = PackedInt32Array(65536, 2162688, 30, 131072, 2162688, 31, 196608, 2162688, 32, 262144, 2162688, 33, 1, 2228224, 29, 65537, 2228224, 30, 131073, 2228224, 31, 196609, 2228224, 32, 262145, 2228224, 33, 327681, 2228224, 34, 2, 2293760, 29, 65538, 2293760, 30, 131074, 2293760, 31, 196610, 2293760, 32, 262146, 2293760, 33, 327682, 2293760, 34, 65539, 2359296, 30, 131075, 2359296, 31, 196611, 2359296, 32, 262147, 2359296, 33)
@@ -8610,7 +8615,7 @@ layer_5/z_index = 1
 layer_5/tile_data = PackedInt32Array(-65514, 1572864, 30, 22, 1572864, 31, -65513, 1638400, 30, 23, 1638400, 31, -65512, 1703936, 30, 24, 1703936, 31)
 
 [node name="Player" parent="." instance=ExtResource("1_c8w33")]
-position = Vector2(248, 84)
+position = Vector2(159, 90)
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -8637,6 +8642,8 @@ offset_left = -49.0
 offset_top = -4.0
 offset_right = 49.0
 offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0.643137, 0.870588, 0.47451, 1)
 
 [node name="StaminaBar" type="ColorRect" parent="UI"]
@@ -8662,4 +8669,193 @@ offset_left = -49.0
 offset_top = -4.0
 offset_right = 49.0
 offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0.215686, 0.486275, 0.619608, 1)
+
+[node name="AmmoAmount" type="ColorRect" parent="UI"]
+offset_left = 5.0
+offset_top = 8.0
+offset_right = 45.0
+offset_bottom = 28.0
+color = Color(0.227451, 0.223529, 0.207843, 0.415686)
+
+[node name="Icon" type="Sprite2D" parent="UI/AmmoAmount"]
+position = Vector2(10, 10)
+texture = ExtResource("8_85own")
+
+[node name="Value" type="Label" parent="UI/AmmoAmount"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -15.0
+offset_top = -12.0
+offset_right = 4.0
+offset_bottom = 12.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("9_wn6jw")
+theme_override_font_sizes/font_size = 20
+text = "0
+"
+
+[node name="HealthAmount" type="ColorRect" parent="UI"]
+offset_left = 50.0
+offset_top = 8.0
+offset_right = 90.0
+offset_bottom = 28.0
+color = Color(0.227451, 0.223529, 0.207843, 0.415686)
+
+[node name="Icon" type="Sprite2D" parent="UI/HealthAmount"]
+position = Vector2(10, 10)
+texture = ExtResource("10_p52or")
+
+[node name="Value" type="Label" parent="UI/HealthAmount"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -15.0
+offset_top = -12.0
+offset_right = 4.0
+offset_bottom = 12.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("9_wn6jw")
+theme_override_font_sizes/font_size = 20
+text = "0
+"
+
+[node name="PotionAmount" type="ColorRect" parent="UI"]
+offset_left = 96.0
+offset_top = 8.0
+offset_right = 136.0
+offset_bottom = 28.0
+color = Color(0.227451, 0.223529, 0.207843, 0.415686)
+
+[node name="Icon" type="Sprite2D" parent="UI/PotionAmount"]
+position = Vector2(10, 10)
+texture = ExtResource("11_wcije")
+
+[node name="Value" type="Label" parent="UI/PotionAmount"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -15.0
+offset_top = -12.0
+offset_right = 4.0
+offset_bottom = 12.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("9_wn6jw")
+theme_override_font_sizes/font_size = 20
+text = "0
+"
+
+[node name="XP" type="ColorRect" parent="UI"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -95.0
+offset_top = -38.0
+offset_right = -5.0
+offset_bottom = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+color = Color(0.227451, 0.223529, 0.207843, 0.415686)
+
+[node name="Label" type="Label" parent="UI/XP"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 3.0
+offset_top = -11.5
+offset_right = 23.0
+offset_bottom = 12.5
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("9_wn6jw")
+theme_override_font_sizes/font_size = 15
+text = "XP:"
+
+[node name="Value" type="Label" parent="UI/XP"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -58.0
+offset_top = -11.5
+offset_right = -2.0
+offset_bottom = 12.5
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("9_wn6jw")
+theme_override_font_sizes/font_size = 15
+text = "100/100"
+
+[node name="Level" type="ColorRect" parent="UI"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -95.0
+offset_top = -20.0
+offset_right = -5.0
+offset_bottom = -5.0
+grow_horizontal = 0
+grow_vertical = 0
+color = Color(0.227451, 0.223529, 0.207843, 0.415686)
+
+[node name="Label" type="Label" parent="UI/Level"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 4.0
+offset_top = -12.5
+offset_right = 49.0
+offset_bottom = 13.5
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("9_wn6jw")
+theme_override_font_sizes/font_size = 15
+text = "LEVEL:"
+
+[node name="Value" type="Label" parent="UI/Level"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -13.0
+offset_top = -8.5
+offset_bottom = 12.5
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("9_wn6jw")
+theme_override_font_sizes/font_size = 15
+text = "1"
+
+[node name="Pickup" parent="." instance=ExtResource("12_4mcpu")]
+position = Vector2(202, 92)
+item = 2
+
+[node name="Pickup2" parent="." instance=ExtResource("12_4mcpu")]
+position = Vector2(234, 89)
+
+[node name="Pickup3" parent="." instance=ExtResource("12_4mcpu")]
+position = Vector2(221, 113)
+item = 1
