@@ -28,3 +28,9 @@ func _ready():
 		elif item == Pickups.STAMINA:
 			$Sprite2D.set_texture(stamina_texture)
 	
+
+
+func _on_body_entered(body):
+	if body.name == "Player":
+		body.add_pickup(item)
+		get_tree().queue_delete(self)

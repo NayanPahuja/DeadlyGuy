@@ -9,10 +9,17 @@ script/source = "extends CharacterBody2D
 #custom signals
 signal health_updated
 signal stamina_updated
+signal ammo_pickups_updated
+signal health_pickups_updated
+signal stamina_pickups_updated
+
 # calling function for initializing signals when we enter a scene
 func _ready():
 	health_updated.emit(health,max_health)
 	stamina_updated.emit(stamina,max_stamina)
+	ammo_pickups_updated.emit(ammo_pickup)
+	stamina_pickups_updated.emit(stamina_pickup)
+	health_pickups_updated.emit(health_pickup)
 ##takes time as change and updates our health according to regen
 func _process(delta):
 	var updated_health = min(health + regen_health * delta, max_health)
@@ -65,12 +72,34 @@ var regen_health = 100
 var stamina = 100
 var max_stamina = 100
 var regen_stamina = 5
+
+#pickups
+enum Pickups {AMMO , STAMINA, HEALTH }
+var ammo_pickup = 0
+var stamina_pickup = 0
+var health_pickup = 0
 func _input(event):
 	##attacking/shooting
 	if event.is_action_pressed(\"ui_attack\"):
-		is_attacking = true
-		var animation = \"attack_\" + return_direction(new_direction)
-		$AnimatedSprite2D.play(animation)
+		if ammo_pickup > 0:
+			ammo_pickup -= 1
+			ammo_pickups_updated.emit(ammo_pickup)
+			is_attacking = true
+			var animation = \"attack_\" + return_direction(new_direction)
+			$AnimatedSprite2D.play(animation)
+	elif event.is_action_pressed(\"ui_consume_health\"):
+		if health && health_pickup > 0:
+			health_pickup -= 1;
+			health = min(health+30,max_health)
+			health_updated.emit(health, max_health)
+			health_pickups_updated.emit(health_pickup)
+			
+	elif event.is_action_pressed(\"ui_consume_stamina\"):
+		if stamina && stamina_pickup > 0:
+			stamina_pickup -= 1
+			stamina = min(stamina+40,max_stamina)
+			stamina_updated.emit(stamina,max_stamina)
+			stamina_pickups_updated.emit(stamina_pickup)
 ## Function to set input listeners for animation
 func player_animations(direction : Vector2):
 		if direction != Vector2.ZERO:
@@ -86,7 +115,7 @@ func player_animations(direction : Vector2):
 		
 		#To determine the direction that the player is facing, we need to create two new variables. 
 		#The first variable is the variable that we will compare against a zero vector
-		
+
 		
 func return_direction(direction: Vector2):
 	#normalize the direction for comparison so that it's length is 1
@@ -112,6 +141,21 @@ func return_direction(direction: Vector2):
 
 func _on_animated_sprite_2d_animation_finished():
 	is_attacking = false
+
+func add_pickup(item):
+	if item == Pickups.AMMO:
+		ammo_pickup = ammo_pickup + 3
+		ammo_pickups_updated.emit(ammo_pickup)
+		print(\"ammo val:\" + str(ammo_pickup))
+	if item  == Pickups.HEALTH:
+		health_pickup = health_pickup + 1
+		health_pickups_updated.emit(health_pickup)
+		print(\"health val:\" + str(health_pickup))
+	if item == Pickups.STAMINA:
+		stamina_pickup = stamina_pickup + 1
+		stamina_pickups_updated.emit(stamina_pickup)
+		print(\"stamina val:\" + str(stamina_pickup))
+
 "
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f7vmh"]
