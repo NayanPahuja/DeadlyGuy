@@ -1,8 +1,6 @@
+res://Scenes/Enemy.gd
+res://Scenes/Main.tscn
 res://Scenes/pickup.gd
 res://Scenes/pickup.tscn
 res://Scenes/player.tscn
-res://Scenes/Main.tscn
-res://Scenes/AmmoAmount.gd
-res://Scenes/HealthAmount.gd
-res://Scenes/Main.gd
-res://Scenes/PotionAmount.gd
+res://Scenes/cactus.tscn
