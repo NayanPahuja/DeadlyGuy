@@ -1,37 +1,62 @@
+###EnemySpawner.gd
+
 extends Node2D
 
-var spawnPosition
+# tilemap reference so our enemy doesn't spawn on certain layers
+var tilemap
 
-
-var tilemap ## so that our enemy does not spawn on our houses/foliage
-
-@export var spawn_area : Rect2 = Rect2(50, 150, 700, 700) 
-
+#spawn variables that can be edited in Inspector panel
+#it’s a rectangle that represents the area in which we want the enemy's to spawn
+@export var spawn_area : Rect2 = Rect2(50, 150, 750, 750) 
+#max amount of enemies that can spawn
 @export var max_enemies = 20
-
+#enemy amount that will load up with the game
 @export var existing_enemies = 5
+#enemy count, scene ref, and randomizer for enemy spawn position
+var enemy_count = 0 
+var enemy_scene = load("res://Scenes/cactus.tscn") #Enemy scene reference
+var rng = RandomNumberGenerator.new()
 
-var enemy_count = 0
+func _ready():
+	# Get tilemap node reference in our Main scene
+	tilemap = get_tree().root.get_node("main/TileMap")
+	#num randomizer
+	rng.randomize()
+	
+	#creates existing enemies on game start
+	for i in range(existing_enemies):
+		spawn_enemy()
+	enemy_count = existing_enemies
+	
+#valid spawn location checking
+func valid_spawn_location(position : Vector2):
+	# Check if the cell type in this position is grass or sand, which is a valid location.
+	#In our tilemap layer, 0 = water, 1 = sand, 2 = grass, 3 = foliage, etc
+	var valid_location = (tilemap.get_layer_name(0)) || (tilemap.get_layer_name(1)) 
+	
+	# If the two conditions are true, the position is valid
+	print("Valid spawn location: " + str(position))
+	return valid_location
 
-var enemy_scene = preload("res://Scenes/cactus.tscn")
-
-var rng  = RandomNumberGenerator.new()
-
-
+#enemy spawning		
 func spawn_enemy():
 	var enemy = enemy_scene.instantiate()
 	add_child(enemy)
+	
+	#spawns enemies on valid locations
 	var valid_location = false
 	while !valid_location:
+		#keep looping to find a valid randomized spawn location on our maps x, y axis 
 		enemy.position.x = spawn_area.position.x + rng.randf_range(0, spawn_area.size.x)
 		enemy.position.y = spawn_area.position.y + rng.randf_range(0, spawn_area.size.y)
-		
+		#set valid location to be enemies new position
 		valid_location = valid_spawn_location(enemy.position)
-		enemy.spawn()
-func valid_spawn_location(position : Vector2):
-		# Check if the cell type in this position is grass or sand, which is a valid location.
-		#In our tilemap layer, 0 = water, 1 = sand, 2 = grass, 3 = foliage, etc
-		var valid_location = (tilemap.get_layer_name(1)) || (tilemap.get_layer_name(2))
+	#spawn enemy with animation delay
+	enemy.spawn()
+	
 
-		# If the two conditions are true, the position is valid
-		return valid_location
+#we want to create a new enemy every second, unless the enemy count is already equal to or greater than max_enemies.
+func _on_timer_timeout():
+	if enemy_count < max_enemies:
+		spawn_enemy()
+		enemy_count = enemy_count + 1

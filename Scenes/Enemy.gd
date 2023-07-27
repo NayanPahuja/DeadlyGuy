@@ -42,6 +42,11 @@ func _physics_process(delta):
 		timer = 0
 	if is_attacking == false:
 		enemy_animations(direction)
+	if $AnimatedSprite2D.animation == "spawn":
+		$Timer.start()
+		timer = 0
+		
+	is_attacking = false
 func _on_timer_timeout():
 	# Calculate the distance of the player's relative position to the enemy's position
 	var player_distance = player.position - position
@@ -111,3 +116,13 @@ func return_direction(direction: Vector2):
 func sync_direction():
 	if direction != Vector2.ZERO:
 		new_direction = direction.normalized()	
+
+
+func spawn():
+	#creates an animation delay		
+	$AnimatedSprite2D.play("spawn")
+	is_attacking = true
+	
+#resets our attacking state back to false
+func _on_animated_sprite_2d_animation_finished():
+	pass
