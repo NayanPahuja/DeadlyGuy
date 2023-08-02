@@ -78,15 +78,29 @@ enum Pickups {AMMO , STAMINA, HEALTH }
 var ammo_pickup = 0
 var stamina_pickup = 0
 var health_pickup = 0
+var bullet_damage = 30
+var bullet_reload_time = 1000
+var bullet_fired_time = 0.5
+var bullet_scene = preload(\"res://Scenes/bullet.tscn\")
 func _input(event):
 	##attacking/shooting
 	if event.is_action_pressed(\"ui_attack\"):
-		if ammo_pickup > 0:
-			ammo_pickup -= 1
-			ammo_pickups_updated.emit(ammo_pickup)
-			is_attacking = true
-			var animation = \"attack_\" + return_direction(new_direction)
-			$AnimatedSprite2D.play(animation)
+			#checks the current time as the amount of time passed in milliseconds since the engine started
+			var now = Time.get_ticks_msec()
+
+			#check if player can shoot if the reload time has passed and we have ammo
+			if now >= bullet_fired_time and ammo_pickup > 0:
+				#shooting anim
+				is_attacking = true
+				var animation  = \"attack_\" + return_direction(new_direction)
+				$AnimatedSprite2D.play(animation)
+
+				#bullet fired time time to current time
+				bullet_fired_time = now + bullet_reload_time
+
+				#reduce and signal ammo change
+				ammo_pickup = ammo_pickup - 1
+				ammo_pickups_updated.emit(ammo_pickup)
 	elif event.is_action_pressed(\"ui_consume_health\"):
 		if health && health_pickup > 0:
 			health_pickup -= 1;
@@ -141,6 +155,14 @@ func return_direction(direction: Vector2):
 
 func _on_animated_sprite_2d_animation_finished():
 	is_attacking = false
+	
+	#Instantiate Bullet
+	if $AnimatedSprite2D.animation.begins_with(\"attack_\"):
+		var bullet = bullet_scene.instantiate()
+		bullet.damage = bullet_damage
+		bullet.direction = new_direction.normalized()
+		bullet.position = position + new_direction.normalized() * 4
+		get_tree().root.get_node(\"main\").add_child(bullet)
 
 func add_pickup(item):
 	if item == Pickups.AMMO:

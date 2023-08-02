@@ -25,6 +25,19 @@ func _on_body_entered(body):
 		if tilemap.get_layer_name(2):
 			return
 	
-	if body.name == "enemy":
+	if body.name.find("Enemy") >= 0:
+		
 		pass
 		##TODO Add functionality for animation and setup health and stamina variables for enemy
+		direction = Vector2.ZERO
+		$AnimatedSprite2D.play("impact")
+		
+
+func _on_animated_sprite_2d_animation_finished():
+	if $AnimatedSprite2D.animation == "impact":
+			get_tree().queue_delete(self)
+	pass # Replace with function body.
+
+
+func _on_timer_timeout():
+	$AnimatedSprite2D.play("impact")

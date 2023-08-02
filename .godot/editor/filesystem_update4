@@ -1,10 +1,5 @@
-res://Scenes/EnemySpawner.gd
-res://Scenes/Enemy.gd
-res://Scenes/Main.tscn
-res://Scenes/pickup.gd
-res://Scenes/pickup.tscn
-res://Scenes/player.tscn
-res://Scenes/cactus.tscn
-res://Scenes/EnemySpawner.tscn
 res://Scenes/bullet.gd
 res://Scenes/bullet.tscn
+res://Scenes/pickup.gd
+res://Scenes/player.tscn
+res://Scenes/Main.tscn
